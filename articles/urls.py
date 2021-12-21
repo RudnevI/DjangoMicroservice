@@ -21,7 +21,6 @@ from articleapp import views
 
 router = routers.DefaultRouter()
 
-
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
@@ -29,4 +28,8 @@ urlpatterns = [
     path('categories/', views.get_post_category),
     path('articles/<int:pk>', views.article_detail),
     path('categories/<int:pk>', views.category_detail),
+    path('tags/<int:pk>', views.tag_detail),
+    path('tags/', views.get_post_tag),
+    path('article-users/', views.get_post_article_user),
+    path('article-users/<int:pk>', views.article_user_detail)
 ]
