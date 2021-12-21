@@ -2,21 +2,18 @@ from .models import Article, Category, Tag, ArticleUser
 from rest_framework import serializers
 
 
-class ArticleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Article
-        category = serializers.SlugRelatedField(
-            many=True,
-            read_only=True,
-            slug_field="name"
-        )
-        fields = ['title', 'content', 'category', 'article_status']
-
-
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['parent_id', 'name']
+
+
+class ArticleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Article
+
+        fields = ['title', 'content', 'category', 'article_status']
+        depth = 1
 
 
 class TagSerializer(serializers.ModelSerializer):

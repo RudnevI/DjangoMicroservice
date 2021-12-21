@@ -12,7 +12,7 @@ class Article(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=100000)
     creation_datetime = models.DateTimeField
-    category_id = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
     HIDDEN = 'HIDDEN'
     PUBLIC = 'PUBLIC'
     ARTICLE_STATUS_CHOICES = [
