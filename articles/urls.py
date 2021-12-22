@@ -31,5 +31,7 @@ urlpatterns = [
     path('tags/<int:pk>', views.tag_detail),
     path('tags/', views.get_post_tag),
     path('article-users/', views.get_post_article_user),
-    path('article-users/<int:pk>', views.article_user_detail)
+    path('article-users/<int:pk>', views.article_user_detail),
+    path('comments/', views.get_post_comments),
+    path('comments/<int:fk>', views.get_comment_by_article_id)
 ]

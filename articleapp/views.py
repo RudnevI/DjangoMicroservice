@@ -2,9 +2,9 @@ from rest_framework import status, permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
-from .models import Article, Category, Tag, ArticleUser
+from .models import Article, Category, Tag, ArticleUser, Comment
 # Create your views here.
-from .serializers import ArticleSerializer, CategorySerializer, TagSerializer, ArticleUserSerializer
+from .serializers import ArticleSerializer, CategorySerializer, TagSerializer, ArticleUserSerializer, CommentSerializer
 
 
 @api_view(['GET', 'POST'])
@@ -151,3 +151,30 @@ def article_user_detail(request, pk):
     elif request.method == 'DELETE':
         article_user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'POST'])
+@permission_classes((permissions.AllowAny,))
+def get_post_comments(request):
+    if request.method == 'GET':
+        comments = Comment.objects.all()
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = CommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes((permissions.AllowAny,))
+def get_comment_by_article_id(request, fk):
+    if request.method == 'GET':
+        try:
+            comment = Comment.objects.filter(article__id=fk)
+        except Comment.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data)
