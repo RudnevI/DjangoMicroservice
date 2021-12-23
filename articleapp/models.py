@@ -13,7 +13,7 @@ class Article(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=100000)
     creation_datetime = models.DateTimeField(default=timezone.now())
-    category = models.ForeignKey(Category, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     HIDDEN = 'HIDDEN'
     PUBLIC = 'PUBLIC'
     ARTICLE_STATUS_CHOICES = [
@@ -41,4 +41,4 @@ class Tag(models.Model):
 class Comment(models.Model):
     user_name = models.CharField(max_length=100)
     content = models.CharField(max_length=10000)
-    article_id = models.ForeignKey(Article, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)

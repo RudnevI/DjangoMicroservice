@@ -15,9 +15,16 @@ def get_post_article(request):
         serializer = ArticleSerializer(articles, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+
+        try:
+            Category.objects.get(pk=request.data["category"])
+        except Category.DoesNotExist:
+            Response(status=status.HTTP_400_BAD_REQUEST)
+
         serializer = ArticleSerializer(data=request.data)
 
         if serializer.is_valid():
+            serializer.validated_data["category"] = Category.objects.get(pk=request.data["category"])
             serializer.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -161,9 +168,17 @@ def get_post_comments(request):
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        try:
+            Article.objects.get(pk=request.data["article"])
+        except Article.DoesNotExist:
+            Response(status=status.HTTP_400_BAD_REQUEST)
+
         serializer = CommentSerializer(data=request.data)
+
         if serializer.is_valid():
+            serializer.validated_data["article"] = Article.objects.get(pk=request.data["article"])
             serializer.save()
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -176,5 +191,7 @@ def get_comment_by_article_id(request, fk):
             comment = Comment.objects.filter(article__id=fk)
         except Comment.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = CommentSerializer(comment)
+        serializer = CommentSerializer(comment, many=True)
         return Response(serializer.data)
+
+# TODO: fix remaining methods

@@ -11,7 +11,6 @@ class CategorySerializer(serializers.ModelSerializer):
 class ArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
-
         fields = ['title', 'content', 'category', 'article_status']
         depth = 1
 
@@ -31,7 +30,9 @@ class ArticleUserSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    article = serializers.IntegerField
+
     class Meta:
         model = Comment
-        fields = ['user_name', 'content', 'article_id']
+        fields = ['user_name', 'content', 'article']
         depth = 1
