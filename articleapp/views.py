@@ -18,13 +18,15 @@ def get_post_article(request):
 
         try:
             Category.objects.get(pk=request.data["category"])
-        except Category.DoesNotExist:
-            Response(status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data="Category is not found")
 
         serializer = ArticleSerializer(data=request.data)
 
         if serializer.is_valid():
-            serializer.validated_data["category"] = Category.objects.get(pk=request.data["category"])
+            category = Category.objects.get(pk=request.data["category"])
+
+            serializer.validated_data["category"] = category
             serializer.save()
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)

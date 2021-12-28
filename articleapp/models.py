@@ -13,7 +13,7 @@ class Article(models.Model):
     title = models.CharField(max_length=100)
     content = models.CharField(max_length=100000)
     creation_datetime = models.DateTimeField(default=timezone.now())
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     HIDDEN = 'HIDDEN'
     PUBLIC = 'PUBLIC'
     ARTICLE_STATUS_CHOICES = [
